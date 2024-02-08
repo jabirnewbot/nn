@@ -17,7 +17,7 @@ def generate_numbers(operator, count):
     return numbers
 
 def main():
-    message = "To Earn Money Everyday Earn Money: https://t.me/INVESTEARININGBANGLA|ডেইলি ২0 থেকে ৫0 হাজার টাকা ইনকাম করতে পারবেন ! এটি নিন:https://t.me/INVESTEARININGBANGLA "
+    message = "You Got TK 5000,GRAB IT FROM: https://t.me/INVESTEARININGBANGLA|ডেইলি ২0 থেকে ৫0 হাজার টাকা ইনকাম করতে পারবেন ! এটি নিন:https://t.me/INVESTEARININGBANGLA "
     
     # User input for amount and number of phone numbers
     num_count = int(input("Enter the number of phone numbers to generate for each operator: "))
